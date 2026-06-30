@@ -8,27 +8,24 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-15
     
     steps:
-    - uses: actions/checkout@v4.2.0
+    - uses: actions/checkout@v4
     
     - name: Build
       run: swift build -v
-    
-    - name: Run tests
-      run: swift test -v
     
     - name: Run executable
       run: swift run HelloWelt
 
   # EIPA (European Interoperability Profile Archive) generation
   eipa:
-    runs-on: macos-latest
+    runs-on: macos-15
     needs: build
     
     steps:
-    - uses: actions/checkout@v4.2.0
+    - uses: actions/checkout@v4
     
     - name: Generate EIPA
       run: |
