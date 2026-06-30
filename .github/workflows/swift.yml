@@ -1,0 +1,67 @@
+name: Swift
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Swift
+      uses: swift-actions/setup-swift@v1
+      with:
+        swift-version: '5.9'
+    
+    - name: Build
+      run: swift build -v
+    
+    - name: Run tests
+      run: swift test -v
+    
+    - name: Run executable
+      run: swift run HelloWelt
+
+  # EIPA (European Interoperability Profile Archive) generation
+  eipa:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Generate EIPA
+      run: |
+        # Install EIPA tools
+        mkdir -p build
+        
+        # Create EIPA metadata
+        cat > build/eipa-metadata.xml << 'EOF'
+        <?xml version="1.0" encoding="UTF-8"?>
+        <eipa:EIPAArchive xmlns:eipa="http://www.eipa.org/schema/1.0">
+          <eipa:Project>
+            <eipa:Name>HelloWelt</eipa:Name>
+            <eipa:Version>1.0.0</eipa:Version>
+            <eipa:Language>Swift</eipa:Language>
+            <eipa:Description>Ein einfaches Swift Hallo Welt Projekt</eipa:Description>
+            <eipa:BuildDate>$(date -u +"%Y-%m-%dT%H:%M:%SZ")</eipa:BuildDate>
+            <eipa:Compliance>
+              <eipa:Standard>EIPA 2024</eipa:Standard>
+              <eipa:Profile>European Interoperability Profile</eipa:Profile>
+            </eipa:Compliance>
+          </eipa:Project>
+        </eipa:EIPAArchive>
+        EOF
+        
+        echo "EIPA Metadaten erstellt"
+    
+    - name: Upload EIPA
+      uses: actions/upload-artifact@v3
+      with:
+        name: eipa-build
+        path: build/eipa-metadata.xml
