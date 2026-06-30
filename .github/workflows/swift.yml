@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-22.04
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.0
     
     - name: Set up Swift
-      uses: swift-actions/setup-swift@v2
+      uses: swift-actions/setup-swift@v3
       with:
         swift-version: '5.9'
     
@@ -33,7 +33,7 @@ jobs:
     needs: build
     
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4.2.0
     
     - name: Generate EIPA
       run: |
