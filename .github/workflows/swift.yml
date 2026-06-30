@@ -8,15 +8,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: macos-latest
     
     steps:
     - uses: actions/checkout@v4.2.0
-    
-    - name: Set up Swift
-      uses: swift-actions/setup-swift@v3
-      with:
-        swift-version: '5.9'
     
     - name: Build
       run: swift build -v
@@ -29,7 +24,7 @@ jobs:
 
   # EIPA (European Interoperability Profile Archive) generation
   eipa:
-    runs-on: ubuntu-22.04
+    runs-on: macos-latest
     needs: build
     
     steps:
